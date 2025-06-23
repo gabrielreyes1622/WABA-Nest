@@ -3,12 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WebhookModule } from './webhook/webhook.module';
 import { WhatsAppModule } from './whatsapp/whatsapp.module';
-import { HttpModule } from '@nestjs/axios';
+import { WebSocketGateway } from './websocket.gateway';
 
 
 @Module({
   imports: [WebhookModule, WhatsAppModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, WebSocketGateway],
 })
 export class AppModule {}
