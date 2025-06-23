@@ -10,7 +10,7 @@ export class WebhookController {
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
 
-    if (mode === 'subscribe' && token === 'mi_token_seguro') {
+    if (mode === 'subscribe' && token === 'mi_token123') {
       console.log('WEBHOOK VERIFICADO');
       return res.status(200).send(challenge);
     } else {
