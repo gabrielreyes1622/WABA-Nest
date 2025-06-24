@@ -2,27 +2,35 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Enviar mensaje por WhatsApp</title>
+    <title>Chat WhatsApp</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   </head>
   <body>
-    <h2>Enviar mensaje</h2>
+    <h2>Enviar mensaje por WhatsApp</h2>
     <form id="form">
-      <label>Número (incluye código país):</label><br />
-      <input type="text" id="numero" placeholder="5219999999999" /><br />
-      <label>Mensaje:</label><br />
-      <input type="text" id="mensaje" /><br /><br />
+      <input type="text" id="numero" placeholder="Número con código país" required />
+      <input type="text" id="mensaje" placeholder="Mensaje" required />
       <button type="submit">Enviar</button>
     </form>
 
-    <p id="status"></p>
+    <h3>📩 Mensajes recibidos:</h3>
+    <ul id="mensajes"></ul>
 
     <script>
-      const form = document.getElementById('form');
-      const status = document.getElementById('status');
+      // Conectar WebSocket
+      const socket = io();
 
-      form.addEventListener('submit', async (e) => {
+      // Escuchar mensajes nuevos desde el backend
+      socket.on('new-message', (msg) => {
+        const ul = document.getElementById('mensajes');
+        const li = document.createElement('li');
+        li.textContent = `📨 De ${msg.from}: ${msg.text}`;
+        ul.appendChild(li);
+      });
+
+      // Enviar mensaje al backend
+      document.getElementById('form').addEventListener('submit', async (e) => {
         e.preventDefault();
-
         const to = document.getElementById('numero').value;
         const message = document.getElementById('mensaje').value;
 
@@ -33,7 +41,7 @@
         });
 
         const data = await res.json();
-        status.textContent = 'Enviado ✅: ' + JSON.stringify(data);
+        console.log('✅ Enviado:', data);
       });
     </script>
   </body>
