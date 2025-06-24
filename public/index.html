@@ -29,12 +29,13 @@
       });
 
       // Escuchar mensajes nuevos desde el backend
-      socket.on('new-message', (msg) => {
-        const ul = document.getElementById('mensajes');
-        const li = document.createElement('li');
-        li.textContent = `📨 De ${msg.from}: ${msg.text}`;
-        ul.appendChild(li);
-      });
+        socket.on('new-message', (msg) => {
+    console.log('📩 Mensaje recibido del backend:', msg);
+    const ul = document.getElementById('mensajes');
+    const li = document.createElement('li');
+    li.textContent = `De ${msg.from}: ${msg.text}`;
+    ul.appendChild(li);
+  });
 
       // Enviar mensaje al backend
       document.getElementById('form').addEventListener('submit', async (e) => {

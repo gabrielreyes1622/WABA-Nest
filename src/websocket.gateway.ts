@@ -15,5 +15,6 @@ export class WsGateway {
 
   sendMessageToClients(message: any) {
     this.server.emit('new-message', message);
+    console.log('📤 Emitido a frontend por WebSocket:', message);
   }
 }
