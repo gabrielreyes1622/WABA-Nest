@@ -8,7 +8,7 @@ async function bootstrap() {
 
   app.use(express.static(join(__dirname, '..', 'public')));
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT ?? 3000;
   await app.listen(port);
 }
 bootstrap();
