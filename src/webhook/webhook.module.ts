@@ -5,6 +5,6 @@ import { WsGateway } from 'src/websocket.gateway';
 
 @Module({
   controllers: [WebhookController],
-    providers: [WsGateway], // ✅ aquí
+    providers: [WsGateway],
 })
 export class WebhookModule {}

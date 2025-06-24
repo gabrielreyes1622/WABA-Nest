@@ -15,21 +15,30 @@ export class WhatsAppController {
     return await this.whatsappService.sendTextMessage(body.to, body.message);
   }
 
-  @Post()
-  handleMessage(@Body() body: any, @Res() res: Response) {
-    const msg = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+ @Post()
+handleMessage(@Body() body: any, @Res() res: Response) {
+  const value = body?.entry?.[0]?.changes?.[0]?.value;
+  const msg = value?.messages?.[0];
+  const contact = value?.contacts?.[0];
 
-    if (msg) {
-      const from = msg.from;
-      const text = msg.text?.body;
+  const wa_id = contact?.wa_id ?? msg?.from; // número del usuario
+  const name = contact?.profile?.name || 'Desconocido';
+  const text = msg?.text?.body ?? '';
 
-      const formatted = { from, text };
-      console.log('📩 Mensaje recibido:', formatted);
+  if (msg && wa_id && text) {
+    const formatted = {
+      from: wa_id,
+      name,
+      text,
+    };
 
-      // Enviar al frontend vía WebSocket
-      this.ws.sendMessageToClients(formatted);
-    }
+    console.log('📩 Mensaje recibido:', formatted);
 
-    res.sendStatus(200);
+    // Emitir al frontend por WebSocket
+    this.ws.sendMessageToClients(formatted);
   }
+
+  res.sendStatus(200);
+}
+
 }
