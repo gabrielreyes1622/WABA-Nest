@@ -21,20 +21,26 @@ export class WebhookController {
   }
 
   @Post()
-  receiveMessage(@Req() req: Request, @Res() res: Response) {
-    console.log('Mensaje recibido:', JSON.stringify(req.body, null, 2));
+receiveMessage(@Req() req: Request, @Res() res: Response) {
+  console.log('Mensaje recibido:', JSON.stringify(req.body, null, 2));
 
-    const msg = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
-    const from = msg?.from;
-    const text = msg?.text?.body;
+  const value = req.body?.entry?.[0]?.changes?.[0]?.value;
+  const msg = value?.messages?.[0];
+  const contact = value?.contacts?.[0];
 
-    if(msg && text){
-      const formatted = { from, text };
-      this.ws.sendMessageToClients(formatted);
-      console.log('📩 Mensaje enviado al frontend:', formatted);
-    }
+  const from = contact?.wa_id ?? msg?.from;
+  const name = contact?.profile?.name?.trim() || 'Desconocido';
+  const text = msg?.text?.body;
 
+  console.log('📛 Contact name:', name);
 
-    res.sendStatus(200);
+  if (msg && text) {
+    const formatted = { from, name, text };
+    console.log('📤 Emitido a frontend por WebSocket:', formatted);
+    this.ws.sendMessageToClients(formatted);
   }
+
+  res.sendStatus(200);
+}
+
 }
