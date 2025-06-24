@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <title>Chat WhatsApp</title>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+      li.sent {
+        color: green;
+      }
+      li.received {
+        color: blue;
+      }
+    </style>
   </head>
   <body>
     <h2>Enviar mensaje por WhatsApp V1 (+1 555 631 5011)</h2>
@@ -17,32 +25,43 @@
       <input type="text" id="mensaje" placeholder="Mensaje" required />
       <button type="submit">Enviar</button>
     </form>
+    <button
+      onclick="localStorage.removeItem('chat-history'); location.reload();"
+    >
+      Limpiar Chat
+    </button>
 
-    <h3>Mensajes recibidos:</h3>
+    <h3>Mensajes:</h3>
     <ul id="mensajes"></ul>
 
     <script>
-      // Conectar WebSocket
       const socket = io('https://waba-nest.onrender.com');
+
       socket.on('connect', () => {
         console.log('🟢 Conectado al WebSocket');
       });
 
-      // Escuchar mensajes nuevos desde el backend
       socket.on('new-message', (msg) => {
-        console.log('🧾 Mensaje completo recibido:', msg);
-
-        const ul = document.getElementById('mensajes');
-        const li = document.createElement('li');
-        li.textContent = `De ${msg.name} (${msg.from}): ${msg.text}`;
-        ul.appendChild(li);
+        console.log('🧾 Mensaje recibido:', msg);
+        msg.type = 'received'; // marcar como recibido
+        saveMessageToLocal(msg);
+        loadMessagesFromLocal();
       });
 
-      // Enviar mensaje al backend
       document.getElementById('form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const to = document.getElementById('numero').value;
         const message = document.getElementById('mensaje').value;
+
+        // Guarda también los mensajes enviados
+        const localMessage = {
+          from: 'yo',
+          name: 'Tú',
+          text: message,
+          type: 'sent',
+        };
+        saveMessageToLocal(localMessage);
+        loadMessagesFromLocal();
 
         const res = await fetch('/send', {
           method: 'POST',
@@ -52,6 +71,29 @@
 
         const data = await res.json();
         console.log('✅ Enviado:', data);
+      });
+
+      function saveMessageToLocal(message) {
+        const key = 'chat-history';
+        const history = JSON.parse(localStorage.getItem(key)) || [];
+        history.push(message);
+        localStorage.setItem(key, JSON.stringify(history));
+      }
+
+      function loadMessagesFromLocal() {
+        const history = JSON.parse(localStorage.getItem('chat-history')) || [];
+        const ul = document.getElementById('mensajes');
+        ul.innerHTML = ''; // 💥 limpiar antes de volver a renderizar
+        history.forEach((msg) => {
+          const li = document.createElement('li');
+          li.textContent = `${msg.type === 'sent' ? 'Tú' : msg.name || 'Desconocido'} (${msg.from}): ${msg.text}`;
+          li.className = msg.type; // sent o received
+          ul.appendChild(li);
+        });
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        loadMessagesFromLocal();
       });
     </script>
   </body>
