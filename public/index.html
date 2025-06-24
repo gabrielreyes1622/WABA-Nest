@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -8,7 +8,12 @@
   <body>
     <h2>Enviar mensaje por WhatsApp</h2>
     <form id="form">
-      <input type="text" id="numero" placeholder="Número con código país" required />
+      <input
+        type="text"
+        id="numero"
+        placeholder="Número con código país"
+        required
+      />
       <input type="text" id="mensaje" placeholder="Mensaje" required />
       <button type="submit">Enviar</button>
     </form>
@@ -19,7 +24,9 @@
     <script>
       // Conectar WebSocket
       const socket = io('https://waba-nest.onrender.com');
-
+      socket.on('connect', () => {
+        console.log('🟢 Conectado al WebSocket');
+      });
 
       // Escuchar mensajes nuevos desde el backend
       socket.on('new-message', (msg) => {
