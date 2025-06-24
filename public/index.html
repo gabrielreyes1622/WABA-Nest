@@ -18,7 +18,8 @@
 
     <script>
       // Conectar WebSocket
-      const socket = io();
+      const socket = io('https://waba-nest.onrender.com');
+
 
       // Escuchar mensajes nuevos desde el backend
       socket.on('new-message', (msg) => {
