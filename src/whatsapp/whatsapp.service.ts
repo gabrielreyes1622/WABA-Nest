@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class WhatsAppService {
-  private readonly token = 'EAAOuK8f1ZADkBO7UrSiZBlxvNWAThbyZB9VcCA1PYlZCrs8E1ZAckuaBjJwae9IfforrcPghMgrn8MkyNkAs35WVuNxQXgFLEoeECEZAVo6JtqK9Ry3Niq5RpQqhyibXRGxZBvvajuJuA5cVojYwRoYeiPv9gcRk0WH2mypPnPbMNip6xlBLBpIaeVZCHEh5FeoWGPonKshxkCBAHZB2Nmp5GaeLexIEETNmNFNArJ1ZB9W3ZCKVQZDZD';
+  private readonly token = 'EAAOuK8f1ZADkBO9s2V8gLqSpqFn7mqwhOQvi5nfq8cUpLmdQ3gCZBVOWynTzbo9ZC5wimgFr9ouYMnERpxOMFiRskJVTLJwSBRH38m9M5DP6VFnyHt0PHajDF6y9o3HYavNvHnUXpsdKAZB2LE20BKtbsVyFNGGGCK9VEVqmZCAxD8BDZCZCNEHOredAqce8844fA63KEy0oHI85hczpieZAZAExPbjbZA11nSPh5FdF7cntWZAUAcZD';
   private readonly phoneNumberId = '701311453062851';
 
   constructor(private readonly http: HttpService) {}

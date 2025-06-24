@@ -4,8 +4,6 @@ import { AppService } from './app.service';
 import { WebhookModule } from './webhook/webhook.module';
 import { WhatsAppModule } from './whatsapp/whatsapp.module';
 import { WsGateway } from './websocket.gateway';
-import { WhatsAppService } from './whatsapp/whatsapp.service';
-
 
 @Module({
   imports: [WebhookModule, WhatsAppModule],
